@@ -34,6 +34,7 @@ index 99f9203..7ef5b95 100644
    v1.12.0: 463fb058b7fa2591fb01f29f2451b054f6cbaa0f8a20394b4a4eb5d68473176f
    v1.11.9: 750edf46d70546e1bee4adf4a59411aa0f7990ccd3c0737fb961820c592a8f34
    v1.11.3: 422a7a32ed9a7b1eaa2a4f9d121674dfbe80eb41e206092c13017d097f75aaec
+
 diff --git a/roles/kubernetes/kubeadm/defaults/main.yml b/roles/kubernetes/kubeadm/defaults/main.yml
 index d9ed537..7bdb702 100644
 --- a/roles/kubernetes/kubeadm/defaults/main.yml
@@ -53,6 +54,7 @@ index d9ed537..7bdb702 100644
 +  {%- else -%}
 +  {{ inventory_hostname }}
 +  {%- endif -%}
+
 diff --git a/roles/kubernetes/kubeadm/tasks/main.yml b/roles/kubernetes/kubeadm/tasks/main.yml
 index 6c4dbe5..46cb5cf 100644
 --- a/roles/kubernetes/kubeadm/tasks/main.yml
@@ -69,6 +71,7 @@ index 6c4dbe5..46cb5cf 100644
  - name: Create kubeadm client config
    template:
      src: "kubeadm-client.conf.{{ kubeadmConfig_api_version }}.j2"
+
 diff --git a/roles/kubernetes/kubeadm/templates/kubeadm-client.conf.v1beta1.j2 b/roles/kubernetes/kubeadm/templates/kubeadm-client.conf.v1beta1.j2
 new file mode 100644
 index 0000000..36cc01f
@@ -98,6 +101,7 @@ index 0000000..36cc01f
 +{% else %}
 +  criSocket: /var/run/dockershim.sock
 +{% endif %}
+
 diff --git a/roles/kubernetes/master/defaults/main.yml b/roles/kubernetes/master/defaults/main.yml
 index 49a09e2..28b47ed 100644
 --- a/roles/kubernetes/master/defaults/main.yml
@@ -254,6 +258,7 @@ index 49a09e2..28b47ed 100644
 +  {%- else -%}
 +  {{ inventory_hostname }}
 +  {%- endif -%}
+
 diff --git a/roles/kubernetes/master/tasks/kubeadm-setup.yml b/roles/kubernetes/master/tasks/kubeadm-setup.yml
 index 8271546..187cecd 100644
 --- a/roles/kubernetes/master/tasks/kubeadm-setup.yml
@@ -286,6 +291,7 @@ index 8271546..187cecd 100644
  
  - name: slurp kubeadm certs
    slurp:
+
 diff --git a/roles/kubernetes/master/tasks/pre-upgrade.yml b/roles/kubernetes/master/tasks/pre-upgrade.yml
 index 56e57b0..9a76fe8 100644
 --- a/roles/kubernetes/master/tasks/pre-upgrade.yml
@@ -317,6 +323,7 @@ index 56e57b0..9a76fe8 100644
 -  delay: 5
 \ No newline at end of file
 +  delay: 5
+
 diff --git a/roles/kubernetes/master/templates/kubeadm-config.v1beta1.yaml.j2 b/roles/kubernetes/master/templates/kubeadm-config.v1beta1.yaml.j2
 new file mode 100644
 index 0000000..4f8e411
@@ -616,6 +623,7 @@ index 0000000..4f8e411
 +oomScoreAdj: {{ kube_proxy_oom_score_adj }}
 +portRange: {{ kube_proxy_port_range }}
 +udpIdleTimeout: {{ kube_proxy_udp_idle_timeout }}
+
 diff --git a/roles/kubernetes/node/tasks/install.yml b/roles/kubernetes/node/tasks/install.yml
 index ceeaa44..a9f2b40 100644
 --- a/roles/kubernetes/node/tasks/install.yml
@@ -635,6 +643,7 @@ index ceeaa44..a9f2b40 100644
  - name: install | Write kubelet systemd init file
    template:
      src: "kubelet.{{ kubelet_deployment_type }}.service.j2"
+
 diff --git a/roles/kubernetes/node/templates/kresolv.conf b/roles/kubernetes/node/templates/kresolv.conf
 new file mode 100644
 index 0000000..5144f9f
@@ -645,6 +654,7 @@ index 0000000..5144f9f
 +nameserver 8.8.8.8
 +search default.svc.cluster.local svc.cluster.local cluster.local
 +options ndots:5
+
 diff --git a/roles/kubernetes/node/templates/kubelet.kubeadm.env.j2 b/roles/kubernetes/node/templates/kubelet.kubeadm.env.j2
 index 8dc19d2..9a784fa 100644
 --- a/roles/kubernetes/node/templates/kubelet.kubeadm.env.j2
@@ -749,6 +759,7 @@ index 8dc19d2..9a784fa 100644
  {% else %}
  KUBELET_CLOUDPROVIDER=""
  {% endif %}
+
 diff --git a/roles/kubespray-defaults/defaults/main.yaml b/roles/kubespray-defaults/defaults/main.yaml
 index 359bad3..b030f84 100644
 --- a/roles/kubespray-defaults/defaults/main.yaml
