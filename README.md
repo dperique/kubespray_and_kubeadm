@@ -1,3 +1,13 @@
+# Kubespray Notes: convert to using kubeadm
+
+My Kubernetes clusters to date have all been using an older version of
+Kubespray (v2.4.0) that didn't support kubeadm that well.  So we went
+used kubespray to build Kubernetes clusters without kubeadm.
+
+Kubespray is deprecating (actually deprecated as of this writing) the
+non kubeadm method of building Kubernetes clusters.  These are my notes
+on my effort to convert from non kubadm to the kubeadm method.
+
 # Summary
 
 * I put all the changes I made in the `xxxx:Dennis-Periquet/kubespray.git`
@@ -297,3 +307,16 @@ unknown flag: --docker-disable-shared-pid
 
 vi /etc/kubernetes/kubelet.env ; remove --cadvisor-port flag
 ```
+
+## Conclusion (for now)
+
+The conversion can range from easy to difficult.  The conversion is easy if you
+just created the Kubernetes cluster and made no changes and are on the version
+that Kubespray, at the time, supports.  The conversion gets more complicated if
+you've had the Kubernetes cluster for a while and have done several Kubernetes
+upgrades beyond what the version of Kubespray supports.
+
+If you are a production shop (like my company), you are in the second category.
+If you want to convert to kubeadm, the safest way will be to create a new
+Kubernetes cluster using the latest Kubespray you can get, and do a blue/green
+switchover and continue to upgrade your Kubespray.
